@@ -12,6 +12,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import java.util.Random;
+
 public class Main extends Application {
 
     private Moves whoseTurn = Moves.CROSS;
@@ -27,7 +29,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         BorderPane root = new BorderPane();
-        GridPane gridPane = new Board();
+        GridPane gridPane = new GridPane();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 gridPane.add(array[i][j] = new Field(), j, i);
@@ -39,6 +41,7 @@ public class Main extends Application {
         gridPane.setMinWidth(300);
 
         root.setBottom(label);
+        label.setText("X's first, easy mode play!");
 
         HBox options = new HBox();
         root.setRight(options);
@@ -48,42 +51,51 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public class Board extends GridPane {
+    public Moves getMoveByXY(int x, int y) {
+        return array[x][y].getMove();
+    }
 
-        public Moves getMove(int x, int y) {
-            return array[x][y].getMove();
+    public Moves checkWin() {
+        for (int i = 0; i < 3; i++) {
+            if (getMoveByXY(i, 0).equals(getMoveByXY(i, 1)) &&
+                    getMoveByXY(i, 1).equals(getMoveByXY(i, 2)) &&
+                    !getMoveByXY(i, 1).equals(Moves.EMPTY)) {
+
+                return getMoveByXY(i, 1);
+            }
         }
-
-        public Moves checkWin() {
-            for (int i = 0; i < 3; i++) {
-                if (getMove(i, 0).equals(getMove(i, 1)) &&
-                        getMove(i, 1).equals(getMove(i, 2)) &&
-                        !getMove(i, 1).equals(Moves.EMPTY)) {
-
-                    return getMove(i, 1);
-                }
+        for (int j = 0; j < 3; j++) {
+            if (getMoveByXY(0, j).equals(getMoveByXY(1, j)) &&
+                    getMoveByXY(1, j).equals(getMoveByXY(2, j)) &&
+                    !getMoveByXY(1, j).equals(Moves.EMPTY)) {
+                return getMoveByXY(1, j);
             }
-            for (int j = 0; j < 3; j++) {
-                if (getMove(0, j).equals(getMove(1, j)) &&
-                        getMove(1, j).equals(getMove(2, j)) &&
-                        !getMove(1, j).equals(Moves.EMPTY)) {
-                    return getMove(1, j);
-                }
-            }
-            if (((getMove(0, 0).equals(getMove(1, 1)) &&
-                    getMove(1, 1).equals(getMove(2, 2))) ||
-                    (getMove(0, 2).equals(getMove(1, 1)) &&
-                            getMove(1, 1).equals(getMove(2, 0)))) &&
-                    !getMove(1, 1).equals(Moves.EMPTY)) {
-                return getMove(1, 1);
-            }
-            return null;
         }
+        if (((getMoveByXY(0, 0).equals(getMoveByXY(1, 1)) &&
+                getMoveByXY(1, 1).equals(getMoveByXY(2, 2))) ||
+                (getMoveByXY(0, 2).equals(getMoveByXY(1, 1)) &&
+                        getMoveByXY(1, 1).equals(getMoveByXY(2, 0)))) &&
+                !getMoveByXY(1, 1).equals(Moves.EMPTY)) {
+            return getMoveByXY(1, 1);
+        }
+        return null;
+    }
 
+    public void computerMove() {
+        Random random = new Random();
+        Field field = array[random.nextInt(3)][random.nextInt(3)];
+        while (field.getMove() != Moves.EMPTY) {
+            field = array[random.nextInt(3)][random.nextInt(3)];
+        }
+        if (!gameOver) {
+            field.drawMove(whoseTurn);
+            whoseTurn = (whoseTurn == Moves.CROSS) ? Moves.CIRCLE : Moves.CROSS;
+            field.statusMessage();
+        }
     }
 
     public class Field extends Pane {
-        private Board gridPane = new Board();
+
         private int fieldsFilled = 0;
         private Moves move = Moves.EMPTY;
 
@@ -114,13 +126,14 @@ public class Main extends Application {
                 drawMove(whoseTurn);
                 whoseTurn = (whoseTurn == Moves.CROSS) ? Moves.CIRCLE : Moves.CROSS;
                 statusMessage();
+                computerMove();
             }
             return whoseTurn;
         }
 
         public void statusMessage() {
-            Moves move = gridPane.checkWin();
-            String message = "X's turn to play";
+            Moves move = checkWin();
+            String message = "";
             if (!gameOver) {
                 if (move != null) {
                     gameOver = true;
@@ -149,6 +162,5 @@ public class Main extends Application {
             ellipse.setFill(Color.WHITE);
             getChildren().add(ellipse);
         }
-
     }
 }
