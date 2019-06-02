@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private boolean gameOver = false;
-    Label statusLabel = new Label();
-//    StatusLabel statusLabel = new StatusLabel();
     Field field = new Field();
     Board board = new Board();
 
@@ -26,48 +24,20 @@ public class Main extends Application {
         BorderPane root = new BorderPane();
         GridPane gridPane = new Board();
 
-
-
-//        Label label = new Label();
-//        label.setText(statusLabel.statusMessage(Board.whoseTurn));
+        Label label = new Label();
 
         root.setLeft(gridPane);
         gridPane.setMinHeight(300);
         gridPane.setMinWidth(300);
 
-        root.setBottom(statusLabel);
-        statusMessage(Board.whoseTurn);
+
+        root.setBottom(label);
 
         HBox options = new HBox();
         root.setRight(options);
-
-
-
 
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(new Scene(root, 500, 320, Color.WHITE));
         primaryStage.show();
     }
-
-    public void statusMessage(Moves whoseTurn) {
-        Moves move = board.checkWin();
-        String message = "X's turn to play";
-        if (!gameOver) {
-            if (move!=null) {
-                gameOver = true;
-                message = move + " won! The game is over";
-                System.out.println(message);
-            } else if (field.getFieldsFilled() > 9) {
-                gameOver = true;
-                message = "Draw! The game is over";
-                System.out.println(message);
-            } else {
-                message = whoseTurn + "'s turn";
-                System.out.println(message);
-            }
-        }
-        statusLabel.setText(message);
-    }
-
-
 }

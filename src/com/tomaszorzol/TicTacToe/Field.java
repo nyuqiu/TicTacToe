@@ -6,15 +6,15 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 
 public class Field extends Pane {
-    StatusLabel statusLabel = new StatusLabel();
-
-    private Moves move = Moves.EMPTY;
+    static Board board = Board.getInstance();
     private boolean gameOver = false;
     private int fieldsFilled = 0;
 
+    private Moves move = Moves.EMPTY;
+
     public Field() {
+        setPrefSize(100, 100);
         setStyle("-fx-border-color: black");
-        setPrefSize(100.0f, 100.0f);
         setOnMouseClicked(e -> handleMouseClick());
     }
 
@@ -22,33 +22,53 @@ public class Field extends Pane {
         return move;
     }
 
-    public void setMove(Moves c) {
+    public void drawMove(Moves c) {
         if (c == Moves.CROSS) {
             drawCross();
+
         } else {
             drawCircle();
+
         }
-        move = c;
+        this.move = c;
         fieldsFilled++;
     }
 
     private Moves handleMouseClick() {
         if(move==Moves.EMPTY) {
-            setMove(Board.whoseTurn);
+            drawMove(Board.whoseTurn);
             Board.whoseTurn = (Board.whoseTurn == Moves.CROSS) ? Moves.CIRCLE : Moves.CROSS;
-            System.out.println(StatusLabel.message1);
+            statusMessage();
         }
         return Board.whoseTurn;
     }
 
-    public int getFieldsFilled() {
-        return fieldsFilled;
+    public String statusMessage() {
+        Moves move = board.checkWin();
+        System.out.println("checkwin " + move + board.getMove(1,1));
+        String message = "X's turn to play";
+        if (!gameOver) {
+            if (move!=null) {
+                gameOver = true;
+                message = move + " won! The game is over";
+                System.out.println(message);
+            } else if (fieldsFilled> 9) {
+                gameOver = true;
+                message = "Draw! The game is over";
+                System.out.println(message);
+            } else {
+                message = Board.whoseTurn + "'s turn";
+                System.out.println(message);
+            }
+        }
+//        statusLabel.setText(message);
+        return message;
     }
 
     public void drawCross() {
         double w = getWidth(), h = getHeight();
-        Line line1 = new Line(10.0f, 10.0f, w - 10.0f, h - 10.0f);
-        Line line2 = new Line(10.0f, h - 10.0f, w - 10.0f, 10.0f);
+        Line line1 = new Line(10, 10, w - 10, h - 10);
+        Line line2 = new Line(10, h - 10, w - 10, 10);
         getChildren().addAll(line1, line2);
     }
 
@@ -59,6 +79,8 @@ public class Field extends Pane {
         ellipse.setFill(Color.WHITE);
         getChildren().add(ellipse);
     }
+
+
 }
 
 

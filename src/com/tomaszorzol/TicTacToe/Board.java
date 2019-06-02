@@ -12,13 +12,16 @@ public class Board extends GridPane {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 board.add(array[i][j] = new Field(), j, i);
-                array[i][j].setMove(Moves.EMPTY);
             }
         }
     }
 
     public Moves getMove(int x, int y) {
         return array[x][y].getMove();
+    }
+
+    public void setMove(Moves move, int x, int y) {
+        array[x][y].drawMove(move);
     }
 
     public static Board getInstance() {
@@ -30,9 +33,13 @@ public class Board extends GridPane {
 
     public Moves checkWin() {
         for (int i = 0; i < 3; i++) {
+            System.out.println(getMove(i,0));
+            System.out.println(getMove(i,1));
+            System.out.println(getMove(i,2));
             if (getMove(i, 0).equals(getMove(i, 1)) &&
                     getMove(i, 1).equals(getMove(i, 2)) &&
                     !getMove(i, 1).equals(Moves.EMPTY)) {
+
                 return getMove(i, 1);
             }
         }
