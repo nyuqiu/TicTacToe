@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="900" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tomaszorzol.TicTacToe.Controller">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <items>
+                        <MenuItem onAction="#game" text="New..." />
+                        <SeparatorMenuItem />
+                        <MenuItem text="Exit" />
+                    </items>
+                </Menu>
+            </MenuBar>
+            <ToolBar>
+                <HBox>
+                    <Button onAction="#game" text="New...">
+                        <tooltip>
+                            <Tooltip text="New game" />
+                        </tooltip>
+                        <!--<graphic>-->
+                        <!--<ImageView>-->
+                        <!--<Image/>-->
+                        <!--</ImageView>-->
+                        <!--</graphic>-->
+                    </Button>
+                </HBox>
+            </ToolBar>
+        </VBox>
+    </top>
+    <left>
+        <GridPane fx:id="ticTacToeBoard" alignment="CENTER" gridLinesVisible="true" hgap="10" vgap="10">
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="x0y0" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="x1y0" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="x2y0" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="x0y1" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="x1y1" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="x2y1" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="0" GridPane.rowIndex="2" fx:id="x0y2" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="x1y2" />
+            <Button onAction="#crossOrCircle" GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="x2y2" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+    </left>
+
+</BorderPane>
