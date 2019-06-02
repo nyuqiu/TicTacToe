@@ -1,16 +1,19 @@
 package com.tomaszorzol.TicTacToe;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 
 public class Field extends Pane {
-    StatusLabel statusLabel = new StatusLabel();
-
+    static Board board = Board.getInstance();
     private Moves move = Moves.EMPTY;
-    private boolean gameOver = false;
     private int fieldsFilled = 0;
+    boolean gameOver = false;
+    private StringProperty statusLabel = new SimpleStringProperty((String) (statusMessage(Board.whoseTurn)));
+
 
     public Field() {
         setStyle("-fx-border-color: black");
@@ -20,6 +23,14 @@ public class Field extends Pane {
 
     public Moves getMove() {
         return move;
+    }
+
+    public String getStatusLabel() {
+        return statusLabel.get();
+    }
+
+    public StringProperty statusLabelProperty() {
+        return statusLabel;
     }
 
     public void setMove(Moves c) {
@@ -33,16 +44,32 @@ public class Field extends Pane {
     }
 
     private Moves handleMouseClick() {
-        if(move==Moves.EMPTY) {
+        if (move == Moves.EMPTY) {
             setMove(Board.whoseTurn);
             Board.whoseTurn = (Board.whoseTurn == Moves.CROSS) ? Moves.CIRCLE : Moves.CROSS;
-            System.out.println(StatusLabel.message1);
+            statusMessage(Board.whoseTurn);
         }
         return Board.whoseTurn;
     }
 
-    public int getFieldsFilled() {
-        return fieldsFilled;
+    private String statusMessage(Moves whoseTurn) {
+        Moves move = board.checkWin();
+        String message = "X's turn to play";
+        if (!gameOver) {
+            if (move != null) {
+                gameOver = true;
+                message = move + " won! The game is over";
+                System.out.println(message);
+            } else if (fieldsFilled > 9) {
+                gameOver = true;
+                message = "Draw! The game is over";
+                System.out.println(message);
+            } else {
+                message = whoseTurn + "'s turn";
+                System.out.println(message);
+            }
+        }
+        return message;
     }
 
     public void drawCross() {
