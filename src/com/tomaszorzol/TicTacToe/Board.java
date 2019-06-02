@@ -5,12 +5,14 @@ import javafx.scene.layout.GridPane;
 public class Board extends GridPane {
     private static Board boardInstance = null;
     private Field[][] array = new Field[3][3];
+    public static Moves whoseTurn = Moves.CROSS;
 
     public Board() {
         Board board = this;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 board.add(array[i][j] = new Field(), j, i);
+                array[i][j].setMove(Moves.EMPTY);
             }
         }
     }

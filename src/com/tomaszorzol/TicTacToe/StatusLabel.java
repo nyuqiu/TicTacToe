@@ -1,30 +1,36 @@
 package com.tomaszorzol.TicTacToe;
 
-import java.awt.*;
+
+import javafx.scene.control.Label;
 
 public class StatusLabel extends Label {
-    private Moves move;
-    private boolean gameOver = false;
-    private Moves whoseTurn = Moves.CROSS; // 'X' or 'O'
-    private int fieldsFilled = 0;
+    static String message1;
+    Board board = Board.getInstance();
 
-//    private String statusMessage() {
-//        String message = "" ;
-//        if (!gameOver) {
-//            setMove(whoseTurn);
-//            if (false) { //hasWon(whoseTurn)
-//                gameOver = true;
-//                message = whoseTurn + " won! The game is over";
-//            }
-//            else if (fieldsFilled>9) {
-//                gameOver = true;
-//                message = "Draw! The game is over";
-//            }
-//            else {
-//                whoseTurn = (whoseTurn == Moves.CROSS) ? Moves.CIRCLE : Moves.CROSS;
-//                message = whoseTurn + "'s turn";
-//            }
-//        }
-//        return message;
-//    }
+    Field field = new Field();
+    private boolean gameOver = false;
+
+    public StatusLabel() {
+    }
+
+    public String statusMessage(Moves whoseTurn) {
+        Moves move = board.checkWin();
+        String message = "X's turn to play";
+        if (!gameOver) {
+            if (move!=null) {
+                gameOver = true;
+                message = move + " won! The game is over";
+                System.out.println(message);
+            } else if (field.getFieldsFilled() > 9) {
+                gameOver = true;
+                message = "Draw! The game is over";
+                System.out.println(message);
+            } else {
+                message = whoseTurn + "'s turn";
+                System.out.println(message);
+            }
+        }
+        message1 = message;
+        return message;
+    }
 }
